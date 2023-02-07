@@ -2,12 +2,16 @@
 import os
 import sqlite3
 from sqlite3 import Error
-from flask import Flask, jsonify
-from Routes import *
+from flask import Flask, jsonify, render_template
 
 app = Flask(__name__)
 
 db_file = r"Projet_IOT.db"
+
+date_prise = "07-02-2023"
+pression = 1000
+temperature = 25
+humidite = 16
 
 
 def init_database(connection):
@@ -15,7 +19,7 @@ def init_database(connection):
     cursor.execute(
     "CREATE TABLE Projet_IOT.Meteo ( id INT(100) AUTO INCREMENT PRIMARY KEY NOT NULL, date_prise varchar(100) NOT NULL,pression INT(100) NOT NULL,temperature INT(100) NOT NULL,humidite INT(100) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;")
     cursor.execute(
-    f"INSERT INTO Meteo (date_prise, altitude, pression, temperature, humidite) VALUES ({date_prise}, {altitude}, {pression}, {temperature}, {humidite});")
+    "INSERT INTO Meteo (date_prise, pression, temperature, humidite) VALUES ({date_prise}, {pression}, {temperature}, {humidite});")
     connection.commit()
 
 
@@ -36,16 +40,6 @@ def create_connection():
 
 
 conn = create_connection()
-
-
-@app.route('/')
-def routes():
-    getDatas = get_Datas()
-    PostDatas = post_Datas()
-    return {
-        "Datas reçu": getDatas,
-        "Datas envoyées": PostDatas
-    }
 
 @app.route('/get_Datas/')
 def get_datas():
@@ -77,8 +71,8 @@ def post_datas():
             'temperature': query[3],
             'humidite': query[4],
         })
-    return jsonify(result)
+    return render_template('TemplateProjet_IOT.html', templateData=jsonify(result))
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)

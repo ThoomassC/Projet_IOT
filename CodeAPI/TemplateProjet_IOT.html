@@ -1,0 +1,17 @@
+
+<!DOCTYPE html>
+   <head>
+      <title>Sans titre pour l'instant</title>
+   </head>
+
+   <body>
+      <table>
+        {% for key, value in templateData.items() %}
+          <tr>
+            <td>{{key}}</td>
+            <td>{{value}}</td>
+          </tr>
+        {% endfor %}
+      </table>
+   </body>
+</html>
