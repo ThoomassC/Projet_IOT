@@ -1,4 +1,3 @@
-# Récupération des données dans la BDD
 import os
 import sqlite3
 from sqlite3 import Error
@@ -43,6 +42,24 @@ def insertDatas():
         VALUES (\'{json.get('hour')}\', {json.get('day')}, {json.get('pressure')}, {json.get('temperature')}, {json.get('humidity')});""")
     conn.commit()
     return jsonify(True)
+
+# Pour le front
+@app.route('/get_Datas/')
+def get_datas():
+    cursor = conn.cursor()
+    cursor.execute("SELECT heure, jour, pressure, temperature, humidity FROM Meteo;")
+    queries = cursor.fetchall()
+    result = []
+    for query in queries:
+        result.append({
+            'heure': query[0],
+            'jour': query[1],
+            'pressure': query[3],
+            'temperature': query[4],
+            'humidity': query[5],
+        })
+    print(jsonify(result))
+    return jsonify(result)
 
 # pour lancer le server
 if __name__ == "__main__":
