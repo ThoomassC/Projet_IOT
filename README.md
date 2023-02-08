@@ -16,7 +16,12 @@ Etape 3:
 - Attendre que le raspberry se connecte au WIFI 
 - Installer python, php, apache et SQLite sur le raspberry 
 
-Etape 4:
+Etape 4 :
+- Créer l'API 
+- Créer la base de données
+- Créer le site Web
+
+Etape 5:
 - Connecter le fichier Arduino au raspberry pour envoyer les données 
 - Connecter l'API au Raspberry pour réçevoir les données 
 - Connecter la base de données au Raspberry pour que l'API demande les données à enregistrer

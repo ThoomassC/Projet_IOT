@@ -3,12 +3,14 @@ import os
 import sqlite3
 from sqlite3 import Error
 from flask import Flask, jsonify, render_template
+import requests
 
 app = Flask(__name__)
 
 db_file = r"Projet_IOT.db"
 
-date_prise = "07-02-2023"
+jour = "Mercredi"
+heure = "0"
 pression = 1000
 temperature = 25
 humidite = 16
@@ -17,9 +19,7 @@ humidite = 16
 def init_database(connection):
     cursor = connection.cursor()
     cursor.execute(
-    "CREATE TABLE Projet_IOT.Meteo ( id INT(100) AUTO INCREMENT PRIMARY KEY NOT NULL, date_prise varchar(100) NOT NULL,pression INT(100) NOT NULL,temperature INT(100) NOT NULL,humidite INT(100) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;")
-    cursor.execute(
-    "INSERT INTO Meteo (date_prise, pression, temperature, humidite) VALUES ({date_prise}, {pression}, {temperature}, {humidite});")
+    "CREATE TABLE Projet_IOT.Meteo ( id INT(100) AUTO INCREMENT PRIMARY KEY NOT NULL,heure varchar(100),jour varchar(100) NOT NULL,pression INT(100) NOT NULL,temperature INT(100) NOT NULL,humidite INT(100) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;")
     connection.commit()
 
 
@@ -44,7 +44,7 @@ conn = create_connection()
 @app.route('/get_Datas/')
 def get_datas():
     cursor = conn.cursor()
-    cursor.execute("SELECT id, date_prise, pression, temperature, humidite FROM Meteo;")
+    cursor.execute("SELECT id, heure, jour, pression, temperature, humidite FROM Meteo;")
     queries = cursor.fetchall()
     result = []
     for query in queries:
@@ -55,24 +55,27 @@ def get_datas():
             'temperature': query[4],
             'humidite': query[5],
         })
-    return jsonify(result)
+    return render_template('TemplateProjet_IOT.html', templateData=jsonify(result))
 
-@app.route('/post_Datas/')
+@app.route('/post_Datas/', method=['POST'])
 def post_datas():
     cursor = conn.cursor()
-    cursor.execute("SELECT id, date_prise, pression, temperature, humidite FROM Meteo;")
-    queries = cursor.fetchall()
-    result = []
-    for query in queries:
-        result.append({
-            'id': query[0],
-            'date_prise': query[1],
-            'pression': query[2],
-            'temperature': query[3],
-            'humidite': query[4],
-        })
-    return render_template('TemplateProjet_IOT.html', templateData=jsonify(result))
+    cursor.execute(
+        "INSERT INTO Meteo (heure, jour, pression, temperature, humidite) VALUES ({heure}, {jour}, {pression}, {temperature}, {humidite});")
+    cursor.commit()
+
+@app.route("/api/data", method=['GET'])
+def get_Datas():
+    url = "http://raspberrypiGRP3.local/"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        data = response.json()
+        print(data)
+        return data
+    else:
+        print("Error: la réponse a retourné un code d'erreur {}".format(response.status_code))
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=80, debug=True)
