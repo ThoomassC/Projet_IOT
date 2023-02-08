@@ -12,7 +12,7 @@ db_file = r"Projet_IOT.db"
 def init_database(connection):
     cursor = connection.cursor()
     cursor.execute(
-    "CREATE TABLE Projet_IOT.Meteo ( id INT(100) AUTO INCREMENT PRIMARY KEY NOT NULL,heure varchar(100),jour varchar(100) NOT NULL,pression INT(100) NOT NULL,temperature INT(100) NOT NULL,humidite INT(100) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;")
+    "CREATE TABLE Projet_IOT.Meteo (id INT(100) AUTO INCREMENT PRIMARY KEY NOT NULL,hour varchar(100),day varchar(100) NOT NULL,pressure INT(100) NOT NULL,temperature INT(100) NOT NULL,humidity INT(100) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;")
     connection.commit()
 
 
@@ -39,8 +39,8 @@ def insertDatas():
     json : dict = request.json
     cursor = conn.cursor()
     cursor.execute(
-        f"""INSERT INTO Meteo (heure, jour, pression, temperature, humidite) 
-        VALUES (\'{json.get('heure')}\', {json.get('jour')}, {json.get('pression')}, {json.get('temperature')}, {json.get('humidite')});""")
+        f"""INSERT INTO Meteo (hour, day, pressure, temperature, humidity) 
+        VALUES (\'{json.get('hour')}\', {json.get('day')}, {json.get('pressure')}, {json.get('temperature')}, {json.get('humidity')});""")
     conn.commit()
     return jsonify(True)
 
