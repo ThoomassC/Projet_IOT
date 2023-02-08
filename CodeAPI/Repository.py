@@ -2,24 +2,11 @@
 import os
 import sqlite3
 from sqlite3 import Error
-from flask import Flask, jsonify, render_template
-import requests
+from flask import Flask, jsonify, render_template, request
 
 app = Flask(__name__)
 
 db_file = r"Projet_IOT.db"
-
-@app.route("/api/data", method=['POST'])
-def getDatas():
-    conn = http.client.HTTPConnection("localhost:80")
-    response = requests.get(conn)
-
-    if response.status_code == 200:
-        data = response.json()
-        print(data)
-        return data
-    else:
-        print("Error: la réponse a retourné un code d'erreur {}".format(response.status_code))
 
 def init_database(connection):
     cursor = connection.cursor()
@@ -46,6 +33,16 @@ def create_connection():
 
 conn = create_connection()
 
+@app.route("/api/data", methods=['POST'])
+def insertDatas():
+    json = request.json
+    cursor = conn.cursor()
+    cursor.execute(
+        f"""INSERT INTO Meteo (heure, jour, pression, temperature, humidite) 
+        VALUES ({json.get('heure')}, {json.get('jour')}, {json.get('pression')}, {json.get('temperature')}, {json.get('humidite')});""")
+    conn.commit()
+    return jsonify(True)
+
 @app.route('/get_Datas/')
 def get_datas():
     cursor = conn.cursor()
@@ -62,13 +59,11 @@ def get_datas():
         })
     return render_template('TemplateProjet_IOT.html', templateData=jsonify(result))
 
-@app.route('/post_Datas/', method=['POST'])
-def postDatas():
-    cursor = conn.cursor()
-    cursor.execute(
-        "INSERT INTO Meteo (heure, jour, pression, temperature, humidite) VALUES ({heure}, {jour}, {pression}, {temperature}, {humidite});")
-    cursor.commit()
 
+@app.route('/getDatas/<int:temperature>/', methods=['GET'])
+def getDatas(temperature):
+    # récupérer les variables dans la route puis paramètre et faire un SELECT
+    return True
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=80, debug=True)
