@@ -9,12 +9,17 @@ app = Flask(__name__)
 
 db_file = r"Projet_IOT.db"
 
-jour = "Mercredi"
-heure = "0"
-pression = 1000
-temperature = 25
-humidite = 16
+@app.route("/api/data", method=['POST'])
+def getDatas():
+    conn = http.client.HTTPConnection("localhost:80")
+    response = requests.get(conn)
 
+    if response.status_code == 200:
+        data = response.json()
+        print(data)
+        return data
+    else:
+        print("Error: la réponse a retourné un code d'erreur {}".format(response.status_code))
 
 def init_database(connection):
     cursor = connection.cursor()
@@ -58,23 +63,11 @@ def get_datas():
     return render_template('TemplateProjet_IOT.html', templateData=jsonify(result))
 
 @app.route('/post_Datas/', method=['POST'])
-def post_datas():
+def postDatas():
     cursor = conn.cursor()
     cursor.execute(
         "INSERT INTO Meteo (heure, jour, pression, temperature, humidite) VALUES ({heure}, {jour}, {pression}, {temperature}, {humidite});")
     cursor.commit()
-
-@app.route("/api/data", method=['GET'])
-def get_Datas():
-    url = "http://raspberrypiGRP3.local/"
-    response = requests.get(url)
-
-    if response.status_code == 200:
-        data = response.json()
-        print(data)
-        return data
-    else:
-        print("Error: la réponse a retourné un code d'erreur {}".format(response.status_code))
 
 
 if __name__ == "__main__":
