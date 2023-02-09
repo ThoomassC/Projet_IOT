@@ -1,7 +1,7 @@
 import os
 import sqlite3
 from sqlite3 import Error
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, request, render_template, jsonify
 
 app = Flask(__name__)
 
@@ -37,29 +37,43 @@ conn = create_connection()
 def insertDatas():
     json : dict = request.json
     cursor = conn.cursor()
-    cursor.execute(
-        f"""INSERT INTO Meteo (date, pressure, temperature, humidity) 
-        VALUES (\'{json.get('date')}\', {json.get('pressure')}, {json.get('temperature')}, {json.get('humidity')});""")
+    cursor.execute(f"INSERT INTO Meteo (date, pressure, temperature, humidity) VALUES (\'{json.get('date')}\', {json.get('pressure')}, {json.get('temperature')}, {json.get('humidity')});")
     conn.commit()
     return jsonify(True)
 
 # Pour le front
+@app.route("/front/data/", methods=['GET'])
 def getDatas():
     cursor = conn.cursor()
-    cursor.execute("SELECT date, pressure, temperature, humidity FROM Meteo;")
+    cursor.execute("SELECT pressure, temperature, humidity FROM Meteo ORDER BY id Desc LIMIT 1;")
     queries = cursor.fetchall()
     result = []
+    results = []
     for query in queries:
         result.append({
-            'heure': query[0],
-            'jour': query[1],
-            'pressure': query[3],
-            'temperature': query[4],
-            'humidity': query[5],
+            'temperature': query[0],
+            'humidity': query[1],
+            'pressure': query[2]
         })
-    results = jsonify(result)
-    return render_template('../CodeWEB/Index.html', results=results)
+    lastTemperature = result['temperature']
+    lastHumidity = result['humidity']
+    lastPressure = result['pressure']
+
+    cursor.execute("SELECT temperature, humidity, pressure FROM Meteo ORDER BY id Desc LIMIT 30;")
+    queryes = cursor.fetchone()
+    for querys in queryes:
+        results.append({
+            'temperature': querys[0],
+            'humidity': querys[1],
+            'pressure': querys[2]
+        })
+    temperature = results['temperature']
+    humidity = results['humidity']
+    pressure = results['pressure']
+
+    return render_template('../CodeWEB/Index.html', temperature=temperature, humidity=humidity, pressure=pressure,
+                           lastTemperature=lastTemperature, lastHumidity=lastHumidity, lastPressure=lastPressure)
 
 # pour lancer le server
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=80, debug=True)
+    app.run(host='0.0.0.0')

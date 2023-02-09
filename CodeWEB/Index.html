@@ -11,8 +11,24 @@
 <body>
 <div id="carouselExampleFade" class="carousel slide carousel-fade">
   <div class="carousel-inner">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
     <div class="carousel-item active">
-      Mettre le graphe ici
+    <script>
+      var ctx = document.getElementById('myChart').getContext('2d');
+      var chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          datasets: [{
+            label: 'Humidité (%)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: {{ humidity }}
+          }]
+        },
+        options: {}
+      });
+      chart.canvas.parentNode.style.height = '260px';
+      chart.canvas.parentNode.style.width = '1200px';
+    </script>
     </div>
     <div class="carousel-item">
       Mettre le graphe ici
