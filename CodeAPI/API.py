@@ -1,7 +1,7 @@
 import os
 import sqlite3
 from sqlite3 import Error
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 
 app = Flask(__name__)
 
@@ -44,7 +44,6 @@ def insertDatas():
     return jsonify(True)
 
 # Pour le front
-@app.route('/get_Datas/')
 def get_datas():
     cursor = conn.cursor()
     cursor.execute("SELECT hour, day, pressure, temperature, humidity FROM Meteo;")
@@ -58,8 +57,8 @@ def get_datas():
             'temperature': query[4],
             'humidity': query[5],
         })
-    print(jsonify(result))
-    return jsonify(result)
+    results = jsonify(result)
+    return render_template('../CodeWEB/Index.html', results=results)
 
 # pour lancer le server
 if __name__ == "__main__":
