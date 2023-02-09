@@ -1,9 +1,7 @@
 /* Pour le corps de page principal */
 
 body {
-  margin-left: 0;
-  margin-right: 0;
-  background-color: antiquewhite;
+ background: linear-gradient(blue, pink);
 }
 
 /* Partie positionnement et font */
