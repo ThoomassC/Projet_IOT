@@ -47,7 +47,7 @@ def insertDatas():
 @app.route('/get_Datas/')
 def get_datas():
     cursor = conn.cursor()
-    cursor.execute("SELECT heure, jour, pressure, temperature, humidity FROM Meteo;")
+    cursor.execute("SELECT hour, day, pressure, temperature, humidity FROM Meteo;")
     queries = cursor.fetchall()
     result = []
     for query in queries:
