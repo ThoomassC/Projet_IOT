@@ -44,7 +44,6 @@ def insertDatas():
     return jsonify(True)
 
 # Pour le front
-@app.route('/get_Datas/')
 def get_datas():
     cursor = conn.cursor()
     cursor.execute("SELECT heure, jour, pressure, temperature, humidity FROM Meteo;")
@@ -58,7 +57,6 @@ def get_datas():
             'temperature': query[4],
             'humidity': query[5],
         })
-    print(jsonify(result))
     return jsonify(result)
 
 # pour lancer le server
