@@ -1,3 +1,26 @@
-html {
-  background: linear-gradient(DodgerBlue, skyblue);
+.nuage{
+      background-image: url('./nuage1.jpg');
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
 }
+
+.carousel-item {
+        height: 25%;
+        margin-left: 25%;
+        max-width: 50%;
+      }
+      table {
+      border-collapse: collapse;
+      width: 100%;
+      }
+
+      th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: left;
+      }
+
+      th {
+      background-color: #f2f2f2;
+      }
