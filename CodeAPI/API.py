@@ -46,33 +46,38 @@ def insertDatas():
 
 # Pour le front
 @app.route("/front/data/", methods=['GET'])
-def getDatas():
+def getData():
     cursor = conn.cursor()
-    cursor.execute("SELECT date, pressure, temperature, humidity FROM Meteo ORDER BY id Desc LIMIT 1;")
+    cursor.execute("SELECT date, humidity, pressure, temperature FROM Meteo ORDER BY id Desc LIMIT 1;")
     queries = cursor.fetchall()
     result = []
     for query in queries:
         result.append({
             'date': query[0],
-            'temperature': query[1],
-            'humidity': query[2],
-            'pressure': query[3]
+            'humidity': query[1],
+            'pressure': query[2],
+            'temperature': query[3]
         })
     data = jsonify(result)
 
-    cursor.execute("SELECT date, temperature, humidity, pressure FROM Meteo ORDER BY id Desc LIMIT 30;")
+    return data
+
+@app.route("/front/datas/", methods=['GET'])
+def getDatas():
+    cursor = conn.cursor()
+    cursor.execute("SELECT date, humidity, pressure, temperature FROM Meteo ORDER BY id Desc LIMIT 30;")
     queries = cursor.fetchall()
     results = []
     for query in queries:
         results.append({
             'date': query[0],
-            'temperature': query[1],
-            'humidity': query[2],
-            'pressure': query[3]
+            'humidity': query[1],
+            'pressure': query[2],
+            'temperature': query[3]
         })
     datas = jsonify(results)
 
-    return data
+    return datas
 
 # pour lancer le server
 if __name__ == "__main__":
