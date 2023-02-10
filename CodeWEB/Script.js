@@ -1,5 +1,5 @@
 const FetchData = async() => {
-    const routeData = await fetch('http://192.168.137.164/front/data/')
+    const routeData = await fetch('http://192.168.137.164:5000/front/data/')
     const newRouteData = await routeData.json()
     return newRouteData;
 }
@@ -27,10 +27,10 @@ const FetchDatas = async() => {
 const Graphs = (async() => {
     const datas = await FetchDatas();
       var temperatureData = {
-        labels: [datas.map(element => element['date'])],
+        labels: datas.map(element => element['date']),
         datasets: [{
             label: "Temperature (°C)",
-            data: [datas.map(element => element['temperature'])],
+            data: datas.map(element => element['temperature']),
             backgroundColor: "transparent",
             borderColor: "#ff5733",
             borderWidth: 2
@@ -38,10 +38,10 @@ const Graphs = (async() => {
         };
 
       var humidityData = {
-        labels: [datas.map(element => element['date'])],
+        labels: datas.map(element => element['date']),
         datasets: [{
             label: "Humidity (%)",
-            data: [datas.map(element => element['humidity'])],
+            data: datas.map(element => element['humidity']),
             backgroundColor: "transparent",
             borderColor: "#1e90ff",
             borderWidth: 2
@@ -49,11 +49,11 @@ const Graphs = (async() => {
         };
 
       var pressureData = {
-        labels: [datas.map(element => element['date'])],
+        labels: datas.map(element => element['date']),
         datasets: [
           {
             label: "Pressure (hPa)",
-            data: [datas.map(element => element['pressure'])],
+            data: datas.map(element => element['pressure']),
             backgroundColor: "transparent",
             borderColor: "#228b22",
             borderWidth: 2
