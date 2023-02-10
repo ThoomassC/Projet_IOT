@@ -2,8 +2,11 @@ import os
 import sqlite3
 from sqlite3 import Error
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 # Création du fichier de BDD
 db_file = r"Projet_IOT.db"
@@ -45,29 +48,31 @@ def insertDatas():
 @app.route("/front/data/", methods=['GET'])
 def getDatas():
     cursor = conn.cursor()
-    cursor.execute("SELECT pressure, temperature, humidity FROM Meteo ORDER BY id Desc LIMIT 1;")
+    cursor.execute("SELECT date, pressure, temperature, humidity FROM Meteo ORDER BY id Desc LIMIT 1;")
     queries = cursor.fetchall()
     result = []
     for query in queries:
         result.append({
-            'temperature': query[0],
-            'humidity': query[1],
-            'pressure': query[2]
+            'date': query[0],
+            'temperature': query[1],
+            'humidity': query[2],
+            'pressure': query[3]
         })
     data = jsonify(result)
 
-    cursor.execute("SELECT temperature, humidity, pressure FROM Meteo ORDER BY id Desc LIMIT 30;")
+    cursor.execute("SELECT date, temperature, humidity, pressure FROM Meteo ORDER BY id Desc LIMIT 30;")
     queries = cursor.fetchall()
     results = []
     for query in queries:
         results.append({
-            'temperature': query[0],
-            'humidity': query[1],
-            'pressure': query[2]
+            'date': query[0],
+            'temperature': query[1],
+            'humidity': query[2],
+            'pressure': query[3]
         })
     datas = jsonify(results)
 
-    return datas, data
+    return data
 
 # pour lancer le server
 if __name__ == "__main__":

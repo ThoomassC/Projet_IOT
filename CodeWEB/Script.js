@@ -1,78 +1,9 @@
-const options = {method: 'GET'};
+const options = {methods: 'GET'};
+
 fetch('http://localhost:5000/front/data/', options)
-    .then(response => JSON.parse(response))
-    .then(response => {var temperatureData = {
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
-        datasets: [{
-            label: "Temperature (°C)",
-            data: [response.map(element => {
-                element.temperature
-            })],
-            backgroundColor: "transparent",
-            borderColor: "#ff5733",
-            borderWidth: 2
-            }]
-        };
-
-      var humidityData = {
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
-        datasets: [{
-            label: "Humidity (%)",
-            data: [response.map(element => {
-                element.humidity
-            })],
-            backgroundColor: "transparent",
-            borderColor: "#1e90ff",
-            borderWidth: 2
-          }]
-        };
-
-      var pressureData = {
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
-        datasets: [
-          {
-            label: "Pressure (hPa)",
-            data: [response.map(element => {
-                element.pressure
-            })],
-            backgroundColor: "transparent",
-            borderColor: "#228b22",
-            borderWidth: 2
-          }
-        ]
-      };
-
-      var options = {
-        scales: {
-          yAxes: [
-            {
-              ticks: {
-                beginAtZero: true
-              }
-            }
-          ]
-        }
-      };
-
-      var temperatureChart = new Chart(document.getElementById("temperatureChart"), {
-        type: "line",
-        data: temperatureData,
-        options: options
-      });
-
-      var humidityChart = new Chart(document.getElementById("humidityChart"), {
-        type: "line",
-        data: humidityData,
-        options: options
-      });
-
-      var pressureChart = new Chart(document.getElementById("pressureChart"), {
-        type: "line",
-        data: pressureData,
-        options: options
-      });
-
-        document.write(`
+    .then(response => console.log(response.json()))
+    .then(response =>
+  document.write(`
  <html>
   <head>
     <meta charset="utf-8">
@@ -85,7 +16,6 @@ fetch('http://localhost:5000/front/data/', options)
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
     <title>Station Météo</title>
   </head>
-
   <body class="nuage">
     <table>
         <thead>
@@ -98,10 +28,10 @@ fetch('http://localhost:5000/front/data/', options)
         </thead>
         <tbody>
           <tr>
-            <td>12:00, 9 février 2023</td>
-            <td>20°C</td>
-            <td>1013 hPa</td>
-            <td>50%</td>
+            <td>${response[0]['Date']}</td>
+            <td>${response.temperature}</td>
+            <td>${response.pressure}</td>
+            <td>${response.humidity}</td>
           </tr>
         </tbody>
     </table>
@@ -145,11 +75,82 @@ fetch('http://localhost:5000/front/data/', options)
         <span class="sr-only">Next</span>
       </a>
       </div>
-      <script>
-      
-     </script>
+      {
+      var temperatureData = {
+        labels: ["January", "February", "March", "April", "May", "June", "July"],
+        datasets: [{
+            label: "Temperature (°C)",
+            data: [response.datas.map(element => {
+                element.temperature
+            })],
+            backgroundColor: "transparent",
+            borderColor: "#ff5733",
+            borderWidth: 2
+            }]
+        };
+
+      var humidityData = {
+        labels: ["January", "February", "March", "April", "May", "June", "July"],
+        datasets: [{
+            label: "Humidity (%)",
+            data: [response.datas.map(element => {
+                element.humidity
+            })],
+            backgroundColor: "transparent",
+            borderColor: "#1e90ff",
+            borderWidth: 2
+          }]
+        };
+
+      var pressureData = {
+        labels: ["January", "February", "March", "April", "May", "June", "July"],
+        datasets: [
+          {
+            label: "Pressure (hPa)",
+            data: [response.datas.map(element => {
+                element.pressure
+            })],
+            backgroundColor: "transparent",
+            borderColor: "#228b22",
+            borderWidth: 2
+          }
+        ]
+      };
+
+      var options = {
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                beginAtZero: true
+              }
+            }
+          ]
+        }
+      };
+
+      var temperatureChart = new Chart(document.getElementById("temperatureChart"), {
+        type: "line",
+        data: temperatureData,
+        options: options
+      });
+
+      var humidityChart = new Chart(document.getElementById("humidityChart"), {
+        type: "line",
+        data: humidityData,
+        options: options
+      });
+
+      var pressureChart = new Chart(document.getElementById("pressureChart"), {
+        type: "line",
+        data: pressureData,
+        options: options
+      });
+     }
   </body>
 </html>
-`)})
-    .catch(err => console.error(err));
+`))
+    .catch(function (error) {
+  console.error(error);
+});
 

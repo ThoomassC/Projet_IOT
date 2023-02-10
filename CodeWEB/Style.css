@@ -1,10 +1,3 @@
-.nuage{
-      background-image: url('./nuage1.jpg');
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
-}
-
 .carousel-item {
         height: 25%;
         margin-left: 25%;
