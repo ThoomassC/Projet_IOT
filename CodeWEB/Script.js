@@ -1,11 +1,11 @@
 const FetchData = async() => {
-    const routeData = await fetch('http://localhost:5000/front/data/')
+    const routeData = await fetch('http://192.168.137.164/front/data/')
     const newRouteData = await routeData.json()
     return newRouteData;
 }
 
 const FetchDatas = async() => {
-    const routeDatas = await fetch('http://localhost:5000/front/datas/')
+    const routeDatas = await fetch('http://192.168.137.164:5000/front/datas/')
     const newRouteDatas = await routeDatas.json()
     return newRouteDatas;
 }
