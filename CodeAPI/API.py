@@ -15,7 +15,14 @@ db_file = r"Projet_IOT.db"
 def init_database(connection):
     cursor = connection.cursor()
     cursor.execute(
-    "CREATE TABLE Projet_IOT.Meteo (id INT(100) AUTO INCREMENT PRIMARY KEY NOT NULL,date varchar(100) NOT NULL,pressure INT(100) NOT NULL,temperature INT(100) NOT NULL,humidity INT(100) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;")
+    """CREATE TABLE Meteo (
+	id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	date TEXT NOT NULL,
+	pressure REAL NOT NULL,
+	temperature REAL NOT NULL,
+	humidity REAL NOT NULL
+);
+""")
     connection.commit()
 
 
