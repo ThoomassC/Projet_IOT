@@ -11,6 +11,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 # Création du fichier de BDD
 db_file = r"Projet_IOT.db"
 
+@app.route("/init_database", methods=["GET"], strict_slashes=False)
 def init_database(connection):
     cursor = connection.cursor()
     cursor.execute(

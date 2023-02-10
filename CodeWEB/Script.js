@@ -10,20 +10,6 @@ const FetchDatas = async() => {
     return newRouteDatas;
 }
 
-class Chart { render(){
-
-`<script type="text/javascript" src="Script.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-`
-}
-}
-
 (async ()=> {
     const data = await FetchData();
     var tbody = document.getElementById('tbody')
@@ -38,18 +24,13 @@ class Chart { render(){
 })()
 
 
-            (async ()=> {
-    const data = await FetchDatas();
-                {`<script type="text/javascript" src="Script.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>`}
+const Graphs = (async() => {
+    const datas = await FetchDatas();
       var temperatureData = {
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
+        labels: [datas.map(element => element['date'])],
         datasets: [{
             label: "Temperature (°C)",
-            data: [20, 25, 30, 35, 40, 35, 30],
+            data: [datas.map(element => element['temperature'])],
             backgroundColor: "transparent",
             borderColor: "#ff5733",
             borderWidth: 2
@@ -57,10 +38,10 @@ class Chart { render(){
         };
 
       var humidityData = {
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
+        labels: [datas.map(element => element['date'])],
         datasets: [{
             label: "Humidity (%)",
-            data: [60, 65, 70, 75, 80, 75, 70],
+            data: [datas.map(element => element['humidity'])],
             backgroundColor: "transparent",
             borderColor: "#1e90ff",
             borderWidth: 2
@@ -68,11 +49,11 @@ class Chart { render(){
         };
 
       var pressureData = {
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
+        labels: [datas.map(element => element['date'])],
         datasets: [
           {
             label: "Pressure (hPa)",
-            data: [1013, 1015, 1017, 1019, 1021, 1019, 1017],
+            data: [datas.map(element => element['pressure'])],
             backgroundColor: "transparent",
             borderColor: "#228b22",
             borderWidth: 2
@@ -109,14 +90,7 @@ class Chart { render(){
         data: pressureData,
         options: options
       });
-    for (var i = 0; i < data.length ; i++){var row =`
-        <tr>
-            <td>${data[0]['date']}</td>
-            <td>${data[0]['temperature']}</td>
-            <td>${data[0]['pressure']}</td>
-            <td>${data[0]['humidity']}</td>
-        </tr>
-    `} pressureChart.innerHTML += row, humidityChart.innerHTML += row, temperatureChart.innerHTML += row
+     pressureChart.innerHTML, humidityChart.innerHTML, temperatureChart.innerHTML
 })()
 
 
